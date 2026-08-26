@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Búfalos Mojados - Iniciar Sesión</title>
+    <meta name="theme-color" content="#1b5e20">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="stylesheet" href="src/css/auth.css">
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <div class="auth-header">
+                <h1>🦬</h1>
+                <h2>Búfalos Mojados</h2>
+                <p>Inicia sesión para continuar</p>
+            </div>
+
+            <form id="form-login">
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="tu@email.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label for="password">Contraseña</label>
+                    <input type="password" id="password" placeholder="Tu contraseña" required autocomplete="current-password">
+                </div>
+                <div id="error-msg" class="error-msg"></div>
+                <button type="submit" class="btn-primary" id="btn-login">Iniciar Sesión</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="src/js/api.js"></script>
+    <script>
+        // Si ya hay token, ir a la app
+        if (localStorage.getItem('token')) {
+            window.location.href = 'index.html';
+        }
+
+        document.getElementById('form-login').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorEl = document.getElementById('error-msg');
+            const btn = document.getElementById('btn-login');
+
+            errorEl.textContent = '';
+            btn.disabled = true;
+            btn.textContent = 'Entrando...';
+
+            try {
+                const data = await API.login(email, password);
+                localStorage.setItem('token', data.token);
+                localStorage.setItem('usuario', JSON.stringify(data.usuario));
+                window.location.href = 'index.html';
+            } catch (err) {
+                errorEl.textContent = err.message;
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Iniciar Sesión';
+            }
+        });
+    </script>
+</body>
+</html>

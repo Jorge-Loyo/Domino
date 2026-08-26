@@ -2,6 +2,8 @@ const express = require('express');
 const cors = require('cors');
 require('dotenv').config();
 
+const authRouter = require('./routes/auth');
+const authMiddleware = require('./middleware/auth');
 const jugadoresRouter = require('./routes/jugadores');
 const partidasRouter = require('./routes/partidas');
 const rankingRouter = require('./routes/ranking');
@@ -18,15 +20,18 @@ app.use(cors({
 }));
 app.use(express.json());
 
-// Rutas
+// Rutas públicas
 app.get('/', (req, res) => {
     res.json({ message: '🦬 Búfalos Mojados API - Domino Tracker', status: 'online' });
 });
 
-app.use('/api/jugadores', jugadoresRouter);
-app.use('/api/partidas', partidasRouter);
-app.use('/api/ranking', rankingRouter);
-app.use('/api/vivo', vivoRouter);
+app.use('/api/auth', authRouter);
+
+// Rutas protegidas (requieren token)
+app.use('/api/jugadores', authMiddleware, jugadoresRouter);
+app.use('/api/partidas', authMiddleware, partidasRouter);
+app.use('/api/ranking', authMiddleware, rankingRouter);
+app.use('/api/vivo', authMiddleware, vivoRouter);
 
 // Error handler
 app.use((err, req, res, next) => {

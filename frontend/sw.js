@@ -1,8 +1,11 @@
-const CACHE_NAME = 'bufalos-mojados-v1';
+const CACHE_NAME = 'bufalos-mojados-v2';
 const ASSETS = [
     './',
     './index.html',
+    './login.html',
+    './registro.html',
     './src/css/styles.css',
+    './src/css/auth.css',
     './src/js/api.js',
     './src/js/ui.js',
     './src/js/live.js',

@@ -7,17 +7,37 @@ const API = (() => {
         ? 'http://localhost:3000/api'
         : 'https://bufalos-mojados-api.onrender.com/api'; // Cambiar por tu URL de Render
 
+    function getToken() {
+        return localStorage.getItem('token');
+    }
+
     async function request(endpoint, options = {}) {
         const url = `${BASE_URL}${endpoint}`;
+        const token = getToken();
+
+        const headers = { 'Content-Type': 'application/json' };
+        if (token) {
+            headers['Authorization'] = `Bearer ${token}`;
+        }
+
         const config = {
-            headers: { 'Content-Type': 'application/json' },
-            ...options
+            headers,
+            ...options,
+            headers: { ...headers, ...(options.headers || {}) }
         };
 
         try {
             showLoading(true);
             const response = await fetch(url, config);
             const data = await response.json();
+
+            if (response.status === 401) {
+                // Token expirado o inválido → cerrar sesión
+                localStorage.removeItem('token');
+                localStorage.removeItem('usuario');
+                window.location.href = 'login.html';
+                throw new Error('Sesión expirada');
+            }
 
             if (!response.ok) {
                 throw new Error(data.error || `Error ${response.status}`);
@@ -34,9 +54,59 @@ const API = (() => {
         }
     }
 
+    // Request sin redirect en 401 (para login/registro)
+    async function requestPublic(endpoint, options = {}) {
+        const url = `${BASE_URL}${endpoint}`;
+        const config = {
+            headers: { 'Content-Type': 'application/json' },
+            ...options
+        };
+
+        try {
+            const response = await fetch(url, config);
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.error || `Error ${response.status}`);
+            }
+
+            return data;
+        } catch (err) {
+            if (err.name === 'TypeError' && err.message.includes('fetch')) {
+                throw new Error('Sin conexión al servidor');
+            }
+            throw err;
+        }
+    }
+
     function showLoading(show) {
         const el = document.getElementById('loading');
         if (el) el.style.display = show ? 'flex' : 'none';
+    }
+
+    // --- Auth ---
+    function login(email, password) {
+        return requestPublic('/auth/login', {
+            method: 'POST',
+            body: JSON.stringify({ email, password })
+        });
+    }
+
+    function registro(nombre, email, password) {
+        return requestPublic('/auth/registro', {
+            method: 'POST',
+            body: JSON.stringify({ nombre, email, password })
+        });
+    }
+
+    function obtenerUsuario() {
+        return request('/auth/me');
+    }
+
+    function cerrarSesion() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('usuario');
+        window.location.href = 'login.html';
     }
 
     // --- Jugadores ---
@@ -126,6 +196,11 @@ const API = (() => {
     }
 
     return {
+        login,
+        registro,
+        obtenerUsuario,
+        cerrarSesion,
+        getToken,
         obtenerJugadores,
         agregarJugador,
         eliminarJugador,

@@ -7,6 +7,18 @@ const { sql } = require('./db');
 async function migrate() {
     console.log('🏗️  Ejecutando migraciones...\n');
 
+    // Tabla de usuarios
+    await sql`
+        CREATE TABLE IF NOT EXISTS usuarios (
+            id SERIAL PRIMARY KEY,
+            nombre VARCHAR(100) NOT NULL,
+            email VARCHAR(255) NOT NULL UNIQUE,
+            password VARCHAR(255) NOT NULL,
+            created_at TIMESTAMP DEFAULT NOW()
+        )
+    `;
+    console.log('✓ Tabla usuarios creada');
+
     // Tabla de jugadores
     await sql`
         CREATE TABLE IF NOT EXISTS jugadores (
