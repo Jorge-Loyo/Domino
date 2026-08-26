@@ -4,8 +4,8 @@
     "description": "Búfalos Mojados - Tracker de Dominó con ranking y partidas en vivo",
     "start_url": "./index.html",
     "display": "standalone",
-    "background_color": "#1b5e20",
-    "theme_color": "#1b5e20",
+    "background_color": "#0d47a1",
+    "theme_color": "#0d47a1",
     "orientation": "portrait",
     "scope": "./",
     "icons": [
