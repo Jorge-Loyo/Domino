@@ -7,16 +7,47 @@ const DominoApp = (() => {
         setupNavegacion();
         setupTabs();
         setupFormularios();
+        setupFormulariosVivo();
         setupFiltros();
         refrescarTodo();
+
+        // Recuperar partida en vivo si existe
+        DominoLive.recuperarPartida();
     }
 
     function refrescarTodo() {
         DominoUI.poblarSelects();
+        poblarSelectsVivo();
         DominoUI.renderizarJugadores();
         DominoUI.renderizarHistorial();
         DominoUI.renderizarRankingIndividual();
         DominoUI.renderizarRankingParejas();
+    }
+
+    // --- Poblar selects de la sección en vivo ---
+    function poblarSelectsVivo() {
+        const jugadores = DominoData.obtenerJugadores();
+        const selects = [
+            'live-ind-j1', 'live-ind-j2',
+            'live-par-e1j1', 'live-par-e1j2',
+            'live-par-e2j1', 'live-par-e2j2'
+        ];
+
+        selects.forEach(id => {
+            const select = document.getElementById(id);
+            if (!select) return;
+            const valorActual = select.value;
+            select.innerHTML = '<option value="">Seleccionar jugador</option>';
+            jugadores.forEach(j => {
+                const option = document.createElement('option');
+                option.value = j.id;
+                option.textContent = j.nombre;
+                select.appendChild(option);
+            });
+            if (valorActual && select.querySelector(`option[value="${valorActual}"]`)) {
+                select.value = valorActual;
+            }
+        });
     }
 
     // --- Navegación principal ---
@@ -61,6 +92,16 @@ const DominoApp = (() => {
                         const tab = btn.dataset.tab;
                         document.getElementById('ranking-individual').style.display = tab === 'ranking-individual' ? 'block' : 'none';
                         document.getElementById('ranking-parejas').style.display = tab === 'ranking-parejas' ? 'block' : 'none';
+                    }
+
+                    // Tabs en En Vivo
+                    if (parent.id === 'en-vivo') {
+                        tabGroup.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                        btn.classList.add('active');
+
+                        const tab = btn.dataset.tab;
+                        document.getElementById('form-live-individual').style.display = tab === 'live-individual' ? 'block' : 'none';
+                        document.getElementById('form-live-parejas').style.display = tab === 'live-parejas' ? 'block' : 'none';
                     }
                 });
             });
@@ -160,6 +201,60 @@ const DominoApp = (() => {
         });
     }
 
+    // --- Formularios En Vivo ---
+    function setupFormulariosVivo() {
+        // Partida individual en vivo
+        document.getElementById('form-live-individual').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const j1 = document.getElementById('live-ind-j1').value;
+            const j2 = document.getElementById('live-ind-j2').value;
+            const meta = document.getElementById('live-meta').value;
+
+            if (!j1 || !j2) {
+                DominoUI.mostrarNotificacion('Selecciona ambos jugadores', 'error');
+                return;
+            }
+            if (j1 === j2) {
+                DominoUI.mostrarNotificacion('Selecciona jugadores diferentes', 'error');
+                return;
+            }
+            if (!meta || meta < 1) {
+                DominoUI.mostrarNotificacion('La meta debe ser al menos 1', 'error');
+                return;
+            }
+
+            DominoLive.iniciarIndividual(j1, j2, meta);
+        });
+
+        // Partida parejas en vivo
+        document.getElementById('form-live-parejas').addEventListener('submit', (e) => {
+            e.preventDefault();
+            const e1j1 = document.getElementById('live-par-e1j1').value;
+            const e1j2 = document.getElementById('live-par-e1j2').value;
+            const e2j1 = document.getElementById('live-par-e2j1').value;
+            const e2j2 = document.getElementById('live-par-e2j2').value;
+            const meta = document.getElementById('live-meta-par').value;
+
+            if (!e1j1 || !e1j2 || !e2j1 || !e2j2) {
+                DominoUI.mostrarNotificacion('Selecciona todos los jugadores', 'error');
+                return;
+            }
+
+            const todos = [e1j1, e1j2, e2j1, e2j2];
+            if (new Set(todos).size !== 4) {
+                DominoUI.mostrarNotificacion('Cada jugador debe ser diferente', 'error');
+                return;
+            }
+
+            if (!meta || meta < 1) {
+                DominoUI.mostrarNotificacion('La meta debe ser al menos 1', 'error');
+                return;
+            }
+
+            DominoLive.iniciarParejas(e1j1, e1j2, e2j1, e2j2, meta);
+        });
+    }
+
     // --- Filtros historial ---
     function setupFiltros() {
         document.getElementById('filtro-tipo').addEventListener('change', () => {
@@ -188,11 +283,38 @@ const DominoApp = (() => {
         }
     }
 
+    // --- Acciones En Vivo (expuestas para onclick) ---
+    function sumarRonda() {
+        DominoLive.sumarRonda();
+    }
+
+    function deshacerRonda(index) {
+        DominoLive.deshacerRonda(index);
+    }
+
+    function cancelarPartidaVivo() {
+        DominoLive.cancelar();
+    }
+
+    function guardarPartidaVivo() {
+        DominoLive.guardarEnHistorial();
+        refrescarTodo();
+    }
+
+    function nuevaPartidaVivo() {
+        DominoLive.nueva();
+    }
+
     // Iniciar cuando el DOM esté listo
     document.addEventListener('DOMContentLoaded', init);
 
     return {
         eliminarJugador,
-        eliminarPartida
+        eliminarPartida,
+        sumarRonda,
+        deshacerRonda,
+        cancelarPartidaVivo,
+        guardarPartidaVivo,
+        nuevaPartidaVivo
     };
 })();

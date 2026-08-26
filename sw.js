@@ -1,10 +1,11 @@
-const CACHE_NAME = 'domino-tracker-v1';
+const CACHE_NAME = 'domino-tracker-v2';
 const ASSETS = [
     './',
     './index.html',
     './css/styles.css',
     './js/data.js',
     './js/ui.js',
+    './js/live.js',
     './js/app.js',
     './manifest.json',
     './icons/icon-72.png',

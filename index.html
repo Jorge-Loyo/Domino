@@ -40,7 +40,8 @@
         <h1>🁣 Domino Tracker</h1>
         <nav id="main-nav">
             <button class="nav-btn active" data-section="jugadores">Jugadores</button>
-            <button class="nav-btn" data-section="nueva-partida">Nueva Partida</button>
+            <button class="nav-btn" data-section="en-vivo">En Vivo</button>
+            <button class="nav-btn" data-section="nueva-partida">Registrar</button>
             <button class="nav-btn" data-section="historial">Historial</button>
             <button class="nav-btn" data-section="ranking">Ranking</button>
         </nav>
@@ -55,6 +56,128 @@
                 <button type="submit" class="btn-primary">Agregar Jugador</button>
             </form>
             <div id="lista-jugadores" class="lista"></div>
+        </section>
+
+        <!-- Sección Partida En Vivo -->
+        <section id="en-vivo" class="section">
+            <h2>Partida En Vivo</h2>
+
+            <!-- Setup de la partida -->
+            <div id="live-setup">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="live-individual">Individual</button>
+                    <button class="tab-btn" data-tab="live-parejas">Parejas</button>
+                </div>
+
+                <form id="form-live-individual" class="form-partida">
+                    <div class="form-group">
+                        <label>Jugador 1:</label>
+                        <select id="live-ind-j1" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jugador 2:</label>
+                        <select id="live-ind-j2" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Puntos para ganar:</label>
+                        <input type="number" id="live-meta" value="100" min="1">
+                    </div>
+                    <button type="submit" class="btn-primary">Iniciar Partida</button>
+                </form>
+
+                <form id="form-live-parejas" class="form-partida" style="display:none;">
+                    <fieldset>
+                        <legend>Equipo 1</legend>
+                        <div class="form-group">
+                            <label>Jugador A:</label>
+                            <select id="live-par-e1j1" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Jugador B:</label>
+                            <select id="live-par-e1j2" required></select>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>Equipo 2</legend>
+                        <div class="form-group">
+                            <label>Jugador A:</label>
+                            <select id="live-par-e2j1" required></select>
+                        </div>
+                        <div class="form-group">
+                            <label>Jugador B:</label>
+                            <select id="live-par-e2j2" required></select>
+                        </div>
+                    </fieldset>
+                    <div class="form-group">
+                        <label>Puntos para ganar:</label>
+                        <input type="number" id="live-meta-par" value="100" min="1">
+                    </div>
+                    <button type="submit" class="btn-primary">Iniciar Partida</button>
+                </form>
+            </div>
+
+            <!-- Marcador en vivo -->
+            <div id="live-scoreboard" style="display:none;">
+                <div class="scoreboard">
+                    <div class="score-header">
+                        <span class="meta-label">Meta: <strong id="live-meta-display">100</strong> pts</span>
+                        <button class="btn-danger" onclick="DominoApp.cancelarPartidaVivo()">Cancelar</button>
+                    </div>
+
+                    <div class="score-teams">
+                        <div class="score-team" id="score-team1">
+                            <div class="team-name" id="team1-name">Equipo 1</div>
+                            <div class="team-score" id="team1-score">0</div>
+                            <div class="score-progress">
+                                <div class="progress-bar" id="team1-progress"></div>
+                            </div>
+                        </div>
+                        <div class="score-vs">VS</div>
+                        <div class="score-team" id="score-team2">
+                            <div class="team-name" id="team2-name">Equipo 2</div>
+                            <div class="team-score" id="team2-score">0</div>
+                            <div class="score-progress">
+                                <div class="progress-bar" id="team2-progress"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Agregar puntos de ronda -->
+                    <div class="add-round">
+                        <h3>Sumar ronda</h3>
+                        <div class="round-inputs">
+                            <div class="round-team">
+                                <label id="round-label1">Equipo 1</label>
+                                <input type="number" id="round-pts1" min="0" value="0" placeholder="0">
+                            </div>
+                            <div class="round-team">
+                                <label id="round-label2">Equipo 2</label>
+                                <input type="number" id="round-pts2" min="0" value="0" placeholder="0">
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="DominoApp.sumarRonda()">Sumar Ronda</button>
+                    </div>
+
+                    <!-- Historial de rondas -->
+                    <div class="rounds-history">
+                        <h3>Rondas</h3>
+                        <div id="rounds-list" class="lista"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Partida finalizada -->
+            <div id="live-finished" style="display:none;">
+                <div class="winner-screen">
+                    <div class="winner-icon">🏆</div>
+                    <h2 id="winner-name">¡Ganador!</h2>
+                    <p id="winner-score">100 - 80</p>
+                    <div class="winner-actions">
+                        <button class="btn-primary" onclick="DominoApp.guardarPartidaVivo()">Guardar en Historial</button>
+                        <button class="btn-danger" style="margin-top:0.5rem;" onclick="DominoApp.nuevaPartidaVivo()">Nueva Partida</button>
+                    </div>
+                </div>
+            </div>
         </section>
 
         <!-- Sección Nueva Partida -->
@@ -198,6 +321,7 @@
 
     <script src="js/data.js"></script>
     <script src="js/ui.js"></script>
+    <script src="js/live.js"></script>
     <script src="js/app.js"></script>
 
     <!-- Service Worker & PWA Install -->

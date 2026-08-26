@@ -382,6 +382,221 @@ fieldset legend {
     margin-bottom: 1rem;
 }
 
+/* ===== PARTIDA EN VIVO ===== */
+.scoreboard {
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+    padding: 1.5rem;
+}
+
+.score-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.meta-label {
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+.meta-label strong {
+    color: var(--accent);
+    font-size: 1.1rem;
+}
+
+.score-teams {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.score-team {
+    flex: 1;
+    text-align: center;
+    padding: 1rem;
+    border-radius: 12px;
+    background: var(--bg);
+    transition: background 0.3s;
+}
+
+.score-team.winning {
+    background: #e8f5e9;
+}
+
+.team-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    color: var(--primary);
+}
+
+.team-score {
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1;
+    margin-bottom: 0.8rem;
+}
+
+.score-vs {
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text-light);
+}
+
+.score-progress {
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: var(--primary);
+    border-radius: 3px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.score-team.winning .progress-bar {
+    background: var(--success);
+}
+
+/* Agregar ronda */
+.add-round {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-bottom: 1.5rem;
+}
+
+.add-round h3 {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: var(--primary);
+}
+
+.round-inputs {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.round-team {
+    flex: 1;
+    text-align: center;
+}
+
+.round-team label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.3rem;
+    color: var(--text-light);
+}
+
+.round-team input {
+    width: 100%;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: 700;
+    padding: 0.8rem;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+}
+
+.round-team input:focus {
+    border-color: var(--primary-light);
+    outline: none;
+}
+
+/* Historial de rondas */
+.rounds-history {
+    margin-top: 1rem;
+}
+
+.rounds-history h3 {
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    color: var(--primary);
+}
+
+.round-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 1rem;
+    background: var(--bg);
+    border-radius: 8px;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.round-item .round-num {
+    font-weight: 600;
+    color: var(--text-light);
+    min-width: 60px;
+}
+
+.round-item .round-scores {
+    font-weight: 500;
+}
+
+.round-item .btn-undo {
+    background: transparent;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0.2rem 0.5rem;
+}
+
+/* Pantalla de ganador */
+.winner-screen {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    background: var(--card-bg);
+    border-radius: 16px;
+    box-shadow: var(--shadow);
+}
+
+.winner-icon {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+    animation: bounce 0.6s ease infinite alternate;
+}
+
+@keyframes bounce {
+    from { transform: translateY(0); }
+    to { transform: translateY(-10px); }
+}
+
+.winner-screen h2 {
+    font-size: 1.8rem;
+    color: var(--primary);
+    margin-bottom: 0.5rem;
+}
+
+.winner-screen p {
+    font-size: 1.2rem;
+    color: var(--text-light);
+    margin-bottom: 2rem;
+}
+
+.winner-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
 /* Responsive */
 @media (max-width: 600px) {
     header {
@@ -417,5 +632,21 @@ fieldset legend {
     .ranking-table td {
         padding: 0.5rem;
         font-size: 0.8rem;
+    }
+
+    .score-teams {
+        flex-direction: column;
+    }
+
+    .score-vs {
+        font-size: 1rem;
+    }
+
+    .team-score {
+        font-size: 2.5rem;
+    }
+
+    .round-inputs {
+        flex-direction: column;
     }
 }
