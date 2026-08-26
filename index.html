@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Domino Tracker</title>
+
+    <!-- PWA Meta Tags -->
+    <meta name="description" content="Registra partidas de dominó, lleva la cuenta y consulta el ranking">
+    <meta name="theme-color" content="#1a237e">
+    <meta name="mobile-web-app-capable" content="yes">
+
+    <!-- iOS (iPhone) specific -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Domino">
+    <link rel="apple-touch-icon" href="icons/icon-152.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="icons/icon-72.png">
+    <link rel="apple-touch-icon" sizes="96x96" href="icons/icon-96.png">
+    <link rel="apple-touch-icon" sizes="128x128" href="icons/icon-128.png">
+    <link rel="apple-touch-icon" sizes="144x144" href="icons/icon-144.png">
+    <link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+    <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" sizes="384x384" href="icons/icon-384.png">
+    <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+
+    <!-- Splash screens iOS -->
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>🁣 Domino Tracker</h1>
+        <nav id="main-nav">
+            <button class="nav-btn active" data-section="jugadores">Jugadores</button>
+            <button class="nav-btn" data-section="nueva-partida">Nueva Partida</button>
+            <button class="nav-btn" data-section="historial">Historial</button>
+            <button class="nav-btn" data-section="ranking">Ranking</button>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Sección Jugadores -->
+        <section id="jugadores" class="section active">
+            <h2>Gestión de Jugadores</h2>
+            <form id="form-jugador">
+                <input type="text" id="nombre-jugador" placeholder="Nombre del jugador" required>
+                <button type="submit" class="btn-primary">Agregar Jugador</button>
+            </form>
+            <div id="lista-jugadores" class="lista"></div>
+        </section>
+
+        <!-- Sección Nueva Partida -->
+        <section id="nueva-partida" class="section">
+            <h2>Registrar Partida</h2>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="individual">Individual</button>
+                <button class="tab-btn" data-tab="parejas">Parejas</button>
+            </div>
+
+            <!-- Partida Individual -->
+            <form id="form-partida-individual" class="form-partida">
+                <h3>Partida Individual</h3>
+                <div class="form-group">
+                    <label>Jugador 1:</label>
+                    <select id="ind-jugador1" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Jugador 2:</label>
+                    <select id="ind-jugador2" required></select>
+                </div>
+                <div class="form-group">
+                    <label>Puntos Jugador 1:</label>
+                    <input type="number" id="ind-puntos1" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Puntos Jugador 2:</label>
+                    <input type="number" id="ind-puntos2" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Ganador:</label>
+                    <select id="ind-ganador" required>
+                        <option value="">Seleccionar ganador</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Guardar Partida</button>
+            </form>
+
+            <!-- Partida en Parejas -->
+            <form id="form-partida-parejas" class="form-partida" style="display:none;">
+                <h3>Partida en Parejas</h3>
+                <fieldset>
+                    <legend>Equipo 1</legend>
+                    <div class="form-group">
+                        <label>Jugador A:</label>
+                        <select id="par-equipo1-j1" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jugador B:</label>
+                        <select id="par-equipo1-j2" required></select>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <legend>Equipo 2</legend>
+                    <div class="form-group">
+                        <label>Jugador A:</label>
+                        <select id="par-equipo2-j1" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Jugador B:</label>
+                        <select id="par-equipo2-j2" required></select>
+                    </div>
+                </fieldset>
+                <div class="form-group">
+                    <label>Puntos Equipo 1:</label>
+                    <input type="number" id="par-puntos1" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Puntos Equipo 2:</label>
+                    <input type="number" id="par-puntos2" min="0" required>
+                </div>
+                <div class="form-group">
+                    <label>Equipo Ganador:</label>
+                    <select id="par-ganador" required>
+                        <option value="">Seleccionar ganador</option>
+                        <option value="equipo1">Equipo 1</option>
+                        <option value="equipo2">Equipo 2</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn-primary">Guardar Partida</button>
+            </form>
+        </section>
+
+        <!-- Sección Historial -->
+        <section id="historial" class="section">
+            <h2>Historial de Partidas</h2>
+            <div class="filtros">
+                <select id="filtro-tipo">
+                    <option value="todas">Todas</option>
+                    <option value="individual">Individuales</option>
+                    <option value="parejas">Parejas</option>
+                </select>
+                <select id="filtro-jugador">
+                    <option value="todos">Todos los jugadores</option>
+                </select>
+            </div>
+            <div id="lista-historial" class="lista"></div>
+        </section>
+
+        <!-- Sección Ranking -->
+        <section id="ranking" class="section">
+            <h2>Ranking</h2>
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="ranking-individual">Individual</button>
+                <button class="tab-btn" data-tab="ranking-parejas">Parejas</button>
+            </div>
+            <div id="ranking-individual" class="ranking-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Jugador</th>
+                            <th>Partidas</th>
+                            <th>Ganadas</th>
+                            <th>Perdidas</th>
+                            <th>% Victoria</th>
+                            <th>Puntos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-ranking-individual"></tbody>
+                </table>
+            </div>
+            <div id="ranking-parejas" class="ranking-table" style="display:none;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>Pareja</th>
+                            <th>Partidas</th>
+                            <th>Ganadas</th>
+                            <th>Perdidas</th>
+                            <th>% Victoria</th>
+                            <th>Puntos</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody-ranking-parejas"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/data.js"></script>
+    <script src="js/ui.js"></script>
+    <script src="js/app.js"></script>
+
+    <!-- Service Worker & PWA Install -->
+    <script>
+        // Registrar Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log('SW registrado:', reg.scope))
+                    .catch(err => console.log('SW error:', err));
+            });
+        }
+
+        // Banner de instalación personalizado
+        let deferredPrompt;
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallBanner();
+        });
+
+        function showInstallBanner() {
+            const banner = document.createElement('div');
+            banner.id = 'install-banner';
+            banner.innerHTML = `
+                <div style="position:fixed; bottom:0; left:0; right:0; background:#1a237e; color:white; padding:1rem; display:flex; align-items:center; justify-content:space-between; z-index:9999; box-shadow:0 -2px 10px rgba(0,0,0,0.3);">
+                    <span>📲 Instalar Domino Tracker en tu dispositivo</span>
+                    <div>
+                        <button onclick="installApp()" style="background:#ff6f00; color:white; border:none; padding:0.5rem 1rem; border-radius:6px; cursor:pointer; font-weight:bold; margin-right:0.5rem;">Instalar</button>
+                        <button onclick="dismissBanner()" style="background:transparent; color:rgba(255,255,255,0.7); border:1px solid rgba(255,255,255,0.3); padding:0.5rem 1rem; border-radius:6px; cursor:pointer;">Luego</button>
+                    </div>
+                </div>
+            `;
+            document.body.appendChild(banner);
+        }
+
+        function installApp() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then(choice => {
+                    deferredPrompt = null;
+                    dismissBanner();
+                });
+            }
+        }
+
+        function dismissBanner() {
+            const banner = document.getElementById('install-banner');
+            if (banner) banner.remove();
+        }
+    </script>
+</body>
+</html>
