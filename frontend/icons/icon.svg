@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="76" fill="#1b5e20"/>
+  <!-- Buffalo silhouette simplified -->
+  <text x="256" y="300" font-size="220" text-anchor="middle" fill="white">🦬</text>
+  <!-- Domino dots bottom -->
+  <circle cx="160" cy="420" r="14" fill="#c8e6c9"/>
+  <circle cx="210" cy="420" r="14" fill="#c8e6c9"/>
+  <circle cx="302" cy="420" r="14" fill="#c8e6c9"/>
+  <circle cx="352" cy="420" r="14" fill="#c8e6c9"/>
+</svg>

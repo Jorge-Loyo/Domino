@@ -1,0 +1,17 @@
+{
+  "name": "bufalos-mojados-api",
+  "version": "1.0.0",
+  "description": "API para Búfalos Mojados - Tracker de Dominó",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "dev": "node --watch src/index.js",
+    "db:migrate": "node src/migrate.js"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "0.9.5",
+    "cors": "2.8.5",
+    "dotenv": "16.4.5",
+    "express": "4.21.0"
+  }
+}
