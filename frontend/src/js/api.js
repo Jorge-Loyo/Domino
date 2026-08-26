@@ -5,7 +5,7 @@ const API = (() => {
     // En producción cambiar a la URL de Render
     const BASE_URL = window.location.hostname === 'localhost'
         ? 'http://localhost:3000/api'
-        : 'https://bufalos-mojados-api.onrender.com/api'; // Cambiar por tu URL de Render
+        : 'https://domino-doof.onrender.com/api'; // URL de Render
 
     function getToken() {
         return localStorage.getItem('token');
