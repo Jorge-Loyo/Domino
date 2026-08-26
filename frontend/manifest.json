@@ -1,7 +1,7 @@
 {
     "name": "Búfalos Mojados",
     "short_name": "Búfalos",
-    "description": "Tracker de Dominó - Partidas, ranking y marcador en vivo",
+    "description": "Búfalos Mojados - Tracker de Dominó con ranking y partidas en vivo",
     "start_url": "./index.html",
     "display": "standalone",
     "background_color": "#1b5e20",

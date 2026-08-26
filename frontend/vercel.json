@@ -1,16 +1,18 @@
 {
+    "buildCommand": "echo done",
+    "outputDirectory": ".",
+    "routes": [
+        { "handle": "filesystem" },
+        { "src": "/login", "dest": "/login.html" },
+        { "src": "/registro", "dest": "/registro.html" },
+        { "src": "/(.*)", "dest": "/index.html" }
+    ],
     "headers": [
         {
             "source": "/sw.js",
             "headers": [
                 { "key": "Cache-Control", "value": "no-cache" },
                 { "key": "Service-Worker-Allowed", "value": "/" }
-            ]
-        },
-        {
-            "source": "/(.*)",
-            "headers": [
-                { "key": "X-Content-Type-Options", "value": "nosniff" }
             ]
         }
     ]

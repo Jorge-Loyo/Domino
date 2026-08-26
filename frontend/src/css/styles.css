@@ -50,8 +50,21 @@ header {
     margin-bottom: 0.8rem;
 }
 
+.header-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.header-logo {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
 header h1 {
-    font-size: 1.6rem;
+    font-size: 1.4rem;
     letter-spacing: -0.5px;
 }
 
