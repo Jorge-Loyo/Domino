@@ -638,6 +638,113 @@ fieldset legend {
   margin: 0 auto;
 }
 
+/* ===== ZAPATERO ===== */
+/* Cuando la pantalla de ganador es zapatero */
+.winner-screen.zapatero,
+#live-finished.zapatero .winner-screen {
+  background: linear-gradient(135deg, #fff8e1, #ffffff);
+  box-shadow: 0 0 0 3px var(--accent), var(--shadow);
+}
+
+/* Badge en el historial */
+.zapatero-badge {
+  font-size: 0.72rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 10px;
+  background: var(--accent);
+  color: #1b1b1b;
+  font-weight: 700;
+  animation: badgeWiggle 2s ease-in-out infinite;
+}
+
+@keyframes badgeWiggle {
+  0%, 92%, 100% { transform: rotate(0deg); }
+  94% { transform: rotate(-8deg); }
+  96% { transform: rotate(8deg); }
+  98% { transform: rotate(-4deg); }
+}
+
+/* Item de historial que es zapatero (clickeable) */
+.historial-item.es-zapatero {
+  cursor: pointer;
+  border: 1.5px solid var(--accent);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.historial-item.es-zapatero:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(255, 193, 7, 0.4);
+}
+
+/* Overlay de la animación */
+.zapatero-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(13, 71, 161, 0.55);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  opacity: 1;
+  transition: opacity 0.4s;
+  cursor: pointer;
+}
+
+.zapatero-mensaje {
+  text-align: center;
+  color: white;
+  z-index: 2;
+  animation: zapateroPop 0.5s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+  padding: 1rem;
+}
+
+.zapatero-mensaje h2 {
+  font-size: 3rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: var(--accent);
+  text-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
+  margin-bottom: 0.5rem;
+}
+
+.zapatero-mensaje p {
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+.zapatero-shoe-big {
+  font-size: 5rem;
+  animation: shoeKick 0.6s ease-in-out infinite alternate;
+  margin-bottom: 0.5rem;
+}
+
+@keyframes zapateroPop {
+  from { transform: scale(0.3); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+@keyframes shoeKick {
+  from { transform: rotate(-20deg) scale(1); }
+  to { transform: rotate(20deg) scale(1.15); }
+}
+
+/* Zapatos que caen */
+.zapatero-shoe {
+  position: absolute;
+  top: -10vh;
+  animation-name: shoeFall;
+  animation-timing-function: linear;
+  animation-iteration-count: 1;
+  z-index: 1;
+}
+
+@keyframes shoeFall {
+  0% { top: -10vh; transform: rotate(0deg); opacity: 1; }
+  100% { top: 110vh; transform: rotate(720deg); opacity: 0.9; }
+}
+
 /* Empty state */
 .empty-state {
   text-align: center;

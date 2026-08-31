@@ -196,14 +196,26 @@ const Live = (() => {
     document.getElementById("live-scoreboard").style.display = "none";
     document.getElementById("live-finished").style.display = "block";
 
-    const ganador =
-      partidaActual.puntos1 >= partidaActual.meta
-        ? partidaActual.equipo1_nombre
-        : partidaActual.equipo2_nombre;
+    const gana1 = partidaActual.puntos1 >= partidaActual.meta;
+    const ganador = gana1
+      ? partidaActual.equipo1_nombre
+      : partidaActual.equipo2_nombre;
+    const perdedor = gana1
+      ? partidaActual.equipo2_nombre
+      : partidaActual.equipo1_nombre;
 
     document.getElementById("winner-name").textContent = `¡${ganador} gana!`;
     document.getElementById("winner-score").textContent =
       `${partidaActual.puntos1} - ${partidaActual.puntos2}`;
+
+    // Detectar zapatero: el perdedor se quedó en 0
+    const finishedEl = document.getElementById("live-finished");
+    if (UI.esZapatero(partidaActual.puntos1, partidaActual.puntos2)) {
+      finishedEl.classList.add("zapatero");
+      UI.animacionZapatero(perdedor);
+    } else {
+      finishedEl.classList.remove("zapatero");
+    }
   }
 
   async function guardarEnHistorial() {

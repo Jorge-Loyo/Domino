@@ -183,17 +183,25 @@ const App = (() => {
         document.getElementById('filtro-tipo').addEventListener('change', cargarHistorial);
         document.getElementById('filtro-jugador').addEventListener('change', cargarHistorial);
 
-        // Eliminar partida (delegación)
+        // Historial: eliminar partida o reproducir animación zapatero (delegación)
         document.getElementById('lista-historial').addEventListener('click', async (e) => {
-            const btn = e.target.closest('[data-delete-partida]');
-            if (!btn) return;
-            if (!confirm('¿Eliminar esta partida?')) return;
-            try {
-                await API.eliminarPartida(btn.dataset.deletePartida);
-                UI.mostrarNotificacion('Partida eliminada');
-                await cargarDatos();
-            } catch (err) {
-                UI.mostrarNotificacion(err.message, 'error');
+            const btnEliminar = e.target.closest('[data-delete-partida]');
+            if (btnEliminar) {
+                if (!confirm('¿Eliminar esta partida?')) return;
+                try {
+                    await API.eliminarPartida(btnEliminar.dataset.deletePartida);
+                    UI.mostrarNotificacion('Partida eliminada');
+                    await cargarDatos();
+                } catch (err) {
+                    UI.mostrarNotificacion(err.message, 'error');
+                }
+                return;
+            }
+
+            // Tocar una partida zapatero → reproducir animación de burla
+            const itemZapatero = e.target.closest('[data-zapatero="1"]');
+            if (itemZapatero) {
+                UI.animacionZapatero(itemZapatero.dataset.perdedor || '');
             }
         });
 

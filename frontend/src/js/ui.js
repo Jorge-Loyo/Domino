@@ -14,6 +14,66 @@ const UI = (() => {
         }, 2500);
     }
 
+    /**
+     * Animación de "Zapatero": burla cuando un equipo gana y el otro
+     * se queda en 0 puntos. Muestra zapatos volando y un mensaje.
+     * @param {string} perdedor - Nombre del equipo/jugador humillado
+     */
+    function animacionZapatero(perdedor = '') {
+        // Evitar duplicados
+        const existente = document.getElementById('zapatero-overlay');
+        if (existente) existente.remove();
+
+        const overlay = document.createElement('div');
+        overlay.id = 'zapatero-overlay';
+        overlay.className = 'zapatero-overlay';
+
+        // Mensaje central
+        const mensaje = document.createElement('div');
+        mensaje.className = 'zapatero-mensaje';
+        mensaje.innerHTML = `
+            <div class="zapatero-shoe-big">👟</div>
+            <h2>¡ZAPATERO!</h2>
+            <p>${perdedor ? perdedor + ' se quedó en 0 🤣' : 'Se quedaron en 0 🤣'}</p>
+        `;
+        overlay.appendChild(mensaje);
+
+        // Zapatos volando
+        const emojis = ['👟', '👞', '🥾', '👢'];
+        const cantidad = 14;
+        for (let i = 0; i < cantidad; i++) {
+            const shoe = document.createElement('span');
+            shoe.className = 'zapatero-shoe';
+            shoe.textContent = emojis[i % emojis.length];
+            shoe.style.left = Math.random() * 100 + 'vw';
+            shoe.style.animationDelay = (Math.random() * 0.8) + 's';
+            shoe.style.animationDuration = (1.5 + Math.random() * 1.5) + 's';
+            shoe.style.fontSize = (1.5 + Math.random() * 2) + 'rem';
+            overlay.appendChild(shoe);
+        }
+
+        document.body.appendChild(overlay);
+
+        // Cerrar al tocar
+        overlay.addEventListener('click', () => cerrarZapatero(overlay));
+
+        // Auto cerrar
+        setTimeout(() => cerrarZapatero(overlay), 4000);
+    }
+
+    function cerrarZapatero(overlay) {
+        if (!overlay || !overlay.parentNode) return;
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.remove(), 400);
+    }
+
+    /**
+     * Determina si una partida fue zapatero (un equipo en 0)
+     */
+    function esZapatero(puntos1, puntos2) {
+        return (puntos1 > 0 && puntos2 === 0) || (puntos2 > 0 && puntos1 === 0);
+    }
+
     function poblarSelects(jugadores) {
         const selects = [
             'ind-jugador1', 'ind-jugador2',
@@ -112,13 +172,23 @@ const UI = (() => {
             const e1Nombres = p.equipo1.map(j => j.nombre).join(' & ');
             const e2Nombres = p.equipo2.map(j => j.nombre).join(' & ');
             const ganadorNombres = p.ganador === 'equipo1' ? e1Nombres : e2Nombres;
+            const perdedorNombres = p.ganador === 'equipo1' ? e2Nombres : e1Nombres;
             const tipoBadge = p.tipo === 'individual' ? 'Individual' : 'Parejas';
 
+            const zapatero = esZapatero(p.puntos1, p.puntos2);
+            const zapateroBadge = zapatero
+                ? `<span class="zapatero-badge">👟 Zapatero</span>`
+                : '';
+            const zapateroAttrs = zapatero
+                ? `data-zapatero="1" data-perdedor="${perdedorNombres.replace(/"/g, '&quot;')}"`
+                : '';
+
             return `
-                <div class="historial-item">
+                <div class="historial-item ${zapatero ? 'es-zapatero' : ''}" ${zapateroAttrs}>
                     <div class="fecha">${fecha}</div>
                     <div class="detalle">
                         <span class="tipo-badge">${tipoBadge}</span>
+                        ${zapateroBadge}
                         <span class="jugadores">${e1Nombres} (${p.puntos1}) vs ${e2Nombres} (${p.puntos2})</span>
                         <span class="resultado ganador">🏆 ${ganadorNombres}</span>
                     </div>
@@ -180,6 +250,8 @@ const UI = (() => {
 
     return {
         mostrarNotificacion,
+        animacionZapatero,
+        esZapatero,
         poblarSelects,
         actualizarSelectGanador,
         renderizarJugadores,
