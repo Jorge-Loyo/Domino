@@ -211,8 +211,8 @@ const UI = (() => {
         tbody.innerHTML = ranking.map((j, i) => {
             const posClass = i < 3 ? `posicion-${i + 1}` : '';
             const medalla = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
-            const zap = j.zapateros_dados || 0;
-            const zapCell = zap > 0 ? `<span class="zap-count">👟 ${zap}</span>` : '0';
+            const zap = j.zapateros_recibidos || 0;
+            const zapCell = zap > 0 ? `<span class="zap-count">👟 ${zap}</span>` : '';
             return `
                 <tr class="${posClass}">
                     <td>${medalla}</td>
@@ -239,8 +239,8 @@ const UI = (() => {
         tbody.innerHTML = ranking.map((p, i) => {
             const posClass = i < 3 ? `posicion-${i + 1}` : '';
             const medalla = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
-            const zap = p.zapateros_dados || 0;
-            const zapCell = zap > 0 ? `<span class="zap-count">👟 ${zap}</span>` : '0';
+            const zap = p.zapateros_recibidos || 0;
+            const zapCell = zap > 0 ? `<span class="zap-count">👟 ${zap}</span>` : '';
             return `
                 <tr class="${posClass}">
                     <td>${medalla}</td>
