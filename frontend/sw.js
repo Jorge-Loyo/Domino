@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bufalos-mojados-v2';
+const CACHE_NAME = 'bufalos-mojados-v3';
 const ASSETS = [
     './',
     './index.html',

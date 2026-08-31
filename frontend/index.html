@@ -1,318 +1,363 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <title>Búfalos Mojados</title>
 
     <!-- PWA Meta Tags -->
-    <meta name="description" content="Búfalos Mojados - Tracker de Dominó con ranking y partidas en vivo">
-    <meta name="theme-color" content="#0d47a1">
-    <meta name="mobile-web-app-capable" content="yes">
+    <meta
+      name="description"
+      content="Búfalos Mojados - Tracker de Dominó con ranking y partidas en vivo"
+    />
+    <meta name="theme-color" content="#0d47a1" />
+    <meta name="mobile-web-app-capable" content="yes" />
 
     <!-- iOS -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Búfalos">
-    <link rel="apple-touch-icon" href="icons/icon-192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="Búfalos" />
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
 
     <!-- Manifest & Favicon -->
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+    <link rel="manifest" href="manifest.json" />
+    <link rel="icon" type="image/svg+xml" href="icons/icon.svg" />
 
-    <link rel="stylesheet" href="src/css/styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="src/css/styles.css" />
+  </head>
+  <body>
     <header>
-        <div class="header-top">
-            <div class="header-brand">
-                <img src="icons/logo.png" alt="Logo" class="header-logo">
-                <h1>Búfalos Mojados</h1>
-            </div>
-            <div class="user-info">
-                <span id="user-name"></span>
-                <button class="btn-logout" id="btn-logout" title="Cerrar sesión">Salir</button>
-            </div>
+      <div class="header-top">
+        <div class="header-brand">
+          <img src="icons/logo.png" alt="Logo" class="header-logo" />
+          <h1>Búfalos Mojados</h1>
         </div>
-        <nav id="main-nav">
-            <button class="nav-btn active" data-section="jugadores">Jugadores</button>
-            <button class="nav-btn" data-section="en-vivo">En Vivo</button>
-            <button class="nav-btn" data-section="nueva-partida">Registrar</button>
-            <button class="nav-btn" data-section="historial">Historial</button>
-            <button class="nav-btn" data-section="ranking">Ranking</button>
-        </nav>
+        <div class="user-info">
+          <span id="user-name"></span>
+          <button class="btn-logout" id="btn-logout" title="Cerrar sesión">
+            Salir
+          </button>
+        </div>
+      </div>
+      <nav id="main-nav">
+        <button class="nav-btn active" data-section="jugadores">
+          Jugadores
+        </button>
+        <button class="nav-btn" data-section="en-vivo">En Vivo</button>
+        <button class="nav-btn" data-section="nueva-partida">Registrar</button>
+        <button class="nav-btn" data-section="historial">Historial</button>
+        <button class="nav-btn" data-section="ranking">Ranking</button>
+      </nav>
     </header>
 
     <main>
-        <!-- Sección Jugadores -->
-        <section id="jugadores" class="section active">
-            <h2>Gestión de Jugadores</h2>
-            <form id="form-jugador">
-                <input type="text" id="nombre-jugador" placeholder="Nombre del jugador" required>
-                <button type="submit" class="btn-primary">Agregar</button>
-            </form>
-            <div id="lista-jugadores" class="lista"></div>
-        </section>
+      <!-- Sección Jugadores -->
+      <section id="jugadores" class="section active">
+        <h2>Gestión de Jugadores</h2>
+        <form id="form-jugador">
+          <input
+            type="text"
+            id="nombre-jugador"
+            placeholder="Nombre del jugador"
+            required
+          />
+          <button type="submit" class="btn-primary">Agregar</button>
+        </form>
+        <div id="lista-jugadores" class="lista"></div>
+      </section>
 
-        <!-- Sección En Vivo -->
-        <section id="en-vivo" class="section">
-            <h2>Partida En Vivo</h2>
+      <!-- Sección En Vivo -->
+      <section id="en-vivo" class="section">
+        <h2>Partida En Vivo</h2>
 
-            <div id="live-setup">
-                <div class="tabs">
-                    <button class="tab-btn active" data-tab="live-individual">Individual</button>
-                    <button class="tab-btn" data-tab="live-parejas">Parejas</button>
-                </div>
+        <div id="live-setup">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="live-individual">
+              Individual
+            </button>
+            <button class="tab-btn" data-tab="live-parejas">Parejas</button>
+          </div>
 
-                <form id="form-live-individual" class="form-partida">
-                    <div class="form-group">
-                        <label>Jugador 1:</label>
-                        <select id="live-ind-j1" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Jugador 2:</label>
-                        <select id="live-ind-j2" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Puntos para ganar:</label>
-                        <input type="number" id="live-meta" value="100" min="1">
-                    </div>
-                    <button type="submit" class="btn-primary">Iniciar Partida</button>
-                </form>
+          <form id="form-live-individual" class="form-partida">
+            <div class="form-group">
+              <label>Jugador 1:</label>
+              <select id="live-ind-j1" required></select>
+            </div>
+            <div class="form-group">
+              <label>Jugador 2:</label>
+              <select id="live-ind-j2" required></select>
+            </div>
+            <div class="form-group">
+              <label>Puntos para ganar:</label>
+              <input type="number" id="live-meta" value="100" min="1" />
+            </div>
+            <button type="submit" class="btn-primary">Iniciar Partida</button>
+          </form>
 
-                <form id="form-live-parejas" class="form-partida" style="display:none;">
-                    <fieldset>
-                        <legend>Equipo 1</legend>
-                        <div class="form-group">
-                            <label>Jugador A:</label>
-                            <select id="live-par-e1j1" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Jugador B:</label>
-                            <select id="live-par-e1j2" required></select>
-                        </div>
-                    </fieldset>
-                    <fieldset>
-                        <legend>Equipo 2</legend>
-                        <div class="form-group">
-                            <label>Jugador A:</label>
-                            <select id="live-par-e2j1" required></select>
-                        </div>
-                        <div class="form-group">
-                            <label>Jugador B:</label>
-                            <select id="live-par-e2j2" required></select>
-                        </div>
-                    </fieldset>
-                    <div class="form-group">
-                        <label>Puntos para ganar:</label>
-                        <input type="number" id="live-meta-par" value="100" min="1">
-                    </div>
-                    <button type="submit" class="btn-primary">Iniciar Partida</button>
-                </form>
+          <form
+            id="form-live-parejas"
+            class="form-partida"
+            style="display: none"
+          >
+            <fieldset>
+              <legend>Equipo 1</legend>
+              <div class="form-group">
+                <label>Jugador A:</label>
+                <select id="live-par-e1j1" required></select>
+              </div>
+              <div class="form-group">
+                <label>Jugador B:</label>
+                <select id="live-par-e1j2" required></select>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Equipo 2</legend>
+              <div class="form-group">
+                <label>Jugador A:</label>
+                <select id="live-par-e2j1" required></select>
+              </div>
+              <div class="form-group">
+                <label>Jugador B:</label>
+                <select id="live-par-e2j2" required></select>
+              </div>
+            </fieldset>
+            <div class="form-group">
+              <label>Puntos para ganar:</label>
+              <input type="number" id="live-meta-par" value="100" min="1" />
+            </div>
+            <button type="submit" class="btn-primary">Iniciar Partida</button>
+          </form>
+        </div>
+
+        <!-- Marcador en vivo -->
+        <div id="live-scoreboard" style="display: none">
+          <div class="scoreboard">
+            <div class="score-header">
+              <span class="meta-label"
+                >Meta: <strong id="live-meta-display">100</strong> pts</span
+              >
+              <button class="btn-danger" id="btn-cancelar-vivo">
+                Cancelar
+              </button>
             </div>
 
-            <!-- Marcador en vivo -->
-            <div id="live-scoreboard" style="display:none;">
-                <div class="scoreboard">
-                    <div class="score-header">
-                        <span class="meta-label">Meta: <strong id="live-meta-display">100</strong> pts</span>
-                        <button class="btn-danger" id="btn-cancelar-vivo">Cancelar</button>
-                    </div>
-
-                    <div class="score-teams">
-                        <div class="score-team" id="score-team1">
-                            <div class="team-name" id="team1-name">Equipo 1</div>
-                            <div class="team-score" id="team1-score">0</div>
-                            <div class="score-progress">
-                                <div class="progress-bar" id="team1-progress"></div>
-                            </div>
-                        </div>
-                        <div class="score-vs">VS</div>
-                        <div class="score-team" id="score-team2">
-                            <div class="team-name" id="team2-name">Equipo 2</div>
-                            <div class="team-score" id="team2-score">0</div>
-                            <div class="score-progress">
-                                <div class="progress-bar" id="team2-progress"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="add-round">
-                        <h3>Sumar ronda</h3>
-                        <div class="round-inputs">
-                            <div class="round-team">
-                                <label id="round-label1">Equipo 1</label>
-                                <input type="number" id="round-pts1" min="0" value="0">
-                            </div>
-                            <div class="round-team">
-                                <label id="round-label2">Equipo 2</label>
-                                <input type="number" id="round-pts2" min="0" value="0">
-                            </div>
-                        </div>
-                        <button class="btn-primary" id="btn-sumar-ronda">Sumar Ronda</button>
-                    </div>
-
-                    <div class="rounds-history">
-                        <h3>Rondas</h3>
-                        <div id="rounds-list" class="lista"></div>
-                    </div>
+            <div class="score-teams">
+              <div class="score-team" id="score-team1">
+                <div class="team-name" id="team1-name">Equipo 1</div>
+                <div class="team-score" id="team1-score">0</div>
+                <div class="score-progress">
+                  <div class="progress-bar" id="team1-progress"></div>
                 </div>
+              </div>
+              <div class="score-vs">VS</div>
+              <div class="score-team" id="score-team2">
+                <div class="team-name" id="team2-name">Equipo 2</div>
+                <div class="team-score" id="team2-score">0</div>
+                <div class="score-progress">
+                  <div class="progress-bar" id="team2-progress"></div>
+                </div>
+              </div>
             </div>
 
-            <!-- Partida finalizada -->
-            <div id="live-finished" style="display:none;">
-                <div class="winner-screen">
-                    <div class="winner-icon">🏆</div>
-                    <h2 id="winner-name">¡Ganador!</h2>
-                    <p id="winner-score">100 - 80</p>
-                    <div class="winner-actions">
-                        <button class="btn-primary" id="btn-guardar-vivo">Guardar en Historial</button>
-                        <button class="btn-danger" id="btn-nueva-vivo">Nueva Partida</button>
-                    </div>
+            <div class="add-round">
+              <h3>Sumar ronda</h3>
+              <div class="round-inputs">
+                <div class="round-team">
+                  <label id="round-label1">Equipo 1</label>
+                  <input type="number" id="round-pts1" min="0" value="0" />
                 </div>
-            </div>
-        </section>
-
-        <!-- Sección Registrar Partida -->
-        <section id="nueva-partida" class="section">
-            <h2>Registrar Partida</h2>
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="individual">Individual</button>
-                <button class="tab-btn" data-tab="parejas">Parejas</button>
+                <div class="round-team">
+                  <label id="round-label2">Equipo 2</label>
+                  <input type="number" id="round-pts2" min="0" value="0" />
+                </div>
+              </div>
+              <button class="btn-primary" id="btn-sumar-ronda">
+                Sumar Ronda
+              </button>
+              <button class="btn-secondary" id="btn-empate">
+                🤝 Empate (ronda sin puntos)
+              </button>
             </div>
 
-            <form id="form-partida-individual" class="form-partida">
-                <h3>Partida Individual</h3>
-                <div class="form-group">
-                    <label>Jugador 1:</label>
-                    <select id="ind-jugador1" required></select>
-                </div>
-                <div class="form-group">
-                    <label>Jugador 2:</label>
-                    <select id="ind-jugador2" required></select>
-                </div>
-                <div class="form-group">
-                    <label>Puntos Jugador 1:</label>
-                    <input type="number" id="ind-puntos1" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label>Puntos Jugador 2:</label>
-                    <input type="number" id="ind-puntos2" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label>Ganador:</label>
-                    <select id="ind-ganador" required>
-                        <option value="">Seleccionar ganador</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-primary">Guardar Partida</button>
-            </form>
+            <div class="rounds-history">
+              <h3>Rondas</h3>
+              <div id="rounds-list" class="lista"></div>
+            </div>
+          </div>
+        </div>
 
-            <form id="form-partida-parejas" class="form-partida" style="display:none;">
-                <h3>Partida en Parejas</h3>
-                <fieldset>
-                    <legend>Equipo 1</legend>
-                    <div class="form-group">
-                        <label>Jugador A:</label>
-                        <select id="par-equipo1-j1" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Jugador B:</label>
-                        <select id="par-equipo1-j2" required></select>
-                    </div>
-                </fieldset>
-                <fieldset>
-                    <legend>Equipo 2</legend>
-                    <div class="form-group">
-                        <label>Jugador A:</label>
-                        <select id="par-equipo2-j1" required></select>
-                    </div>
-                    <div class="form-group">
-                        <label>Jugador B:</label>
-                        <select id="par-equipo2-j2" required></select>
-                    </div>
-                </fieldset>
-                <div class="form-group">
-                    <label>Puntos Equipo 1:</label>
-                    <input type="number" id="par-puntos1" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label>Puntos Equipo 2:</label>
-                    <input type="number" id="par-puntos2" min="0" required>
-                </div>
-                <div class="form-group">
-                    <label>Equipo Ganador:</label>
-                    <select id="par-ganador" required>
-                        <option value="">Seleccionar ganador</option>
-                        <option value="equipo1">Equipo 1</option>
-                        <option value="equipo2">Equipo 2</option>
-                    </select>
-                </div>
-                <button type="submit" class="btn-primary">Guardar Partida</button>
-            </form>
-        </section>
+        <!-- Partida finalizada -->
+        <div id="live-finished" style="display: none">
+          <div class="winner-screen">
+            <div class="winner-icon">🏆</div>
+            <h2 id="winner-name">¡Ganador!</h2>
+            <p id="winner-score">100 - 80</p>
+            <div class="winner-actions">
+              <button class="btn-primary" id="btn-guardar-vivo">
+                Guardar en Historial
+              </button>
+              <button class="btn-danger" id="btn-nueva-vivo">
+                Nueva Partida
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
-        <!-- Sección Historial -->
-        <section id="historial" class="section">
-            <h2>Historial de Partidas</h2>
-            <div class="filtros">
-                <select id="filtro-tipo">
-                    <option value="todas">Todas</option>
-                    <option value="individual">Individuales</option>
-                    <option value="parejas">Parejas</option>
-                </select>
-                <select id="filtro-jugador">
-                    <option value="todos">Todos los jugadores</option>
-                </select>
-            </div>
-            <div id="lista-historial" class="lista"></div>
-        </section>
+      <!-- Sección Registrar Partida -->
+      <section id="nueva-partida" class="section">
+        <h2>Registrar Partida</h2>
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="individual">
+            Individual
+          </button>
+          <button class="tab-btn" data-tab="parejas">Parejas</button>
+        </div>
 
-        <!-- Sección Ranking -->
-        <section id="ranking" class="section">
-            <h2>Ranking</h2>
-            <div class="tabs">
-                <button class="tab-btn active" data-tab="ranking-individual">Individual</button>
-                <button class="tab-btn" data-tab="ranking-parejas">Parejas</button>
+        <form id="form-partida-individual" class="form-partida">
+          <h3>Partida Individual</h3>
+          <div class="form-group">
+            <label>Jugador 1:</label>
+            <select id="ind-jugador1" required></select>
+          </div>
+          <div class="form-group">
+            <label>Jugador 2:</label>
+            <select id="ind-jugador2" required></select>
+          </div>
+          <div class="form-group">
+            <label>Puntos Jugador 1:</label>
+            <input type="number" id="ind-puntos1" min="0" required />
+          </div>
+          <div class="form-group">
+            <label>Puntos Jugador 2:</label>
+            <input type="number" id="ind-puntos2" min="0" required />
+          </div>
+          <div class="form-group">
+            <label>Ganador:</label>
+            <select id="ind-ganador" required>
+              <option value="">Seleccionar ganador</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary">Guardar Partida</button>
+        </form>
+
+        <form
+          id="form-partida-parejas"
+          class="form-partida"
+          style="display: none"
+        >
+          <h3>Partida en Parejas</h3>
+          <fieldset>
+            <legend>Equipo 1</legend>
+            <div class="form-group">
+              <label>Jugador A:</label>
+              <select id="par-equipo1-j1" required></select>
             </div>
-            <div id="ranking-individual" class="ranking-table">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Jugador</th>
-                            <th>PJ</th>
-                            <th>G</th>
-                            <th>P</th>
-                            <th>%V</th>
-                            <th>Pts</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-ranking-individual"></tbody>
-                </table>
+            <div class="form-group">
+              <label>Jugador B:</label>
+              <select id="par-equipo1-j2" required></select>
             </div>
-            <div id="ranking-parejas" class="ranking-table" style="display:none;">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>Pareja</th>
-                            <th>PJ</th>
-                            <th>G</th>
-                            <th>P</th>
-                            <th>%V</th>
-                            <th>Pts</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tbody-ranking-parejas"></tbody>
-                </table>
+          </fieldset>
+          <fieldset>
+            <legend>Equipo 2</legend>
+            <div class="form-group">
+              <label>Jugador A:</label>
+              <select id="par-equipo2-j1" required></select>
             </div>
-        </section>
+            <div class="form-group">
+              <label>Jugador B:</label>
+              <select id="par-equipo2-j2" required></select>
+            </div>
+          </fieldset>
+          <div class="form-group">
+            <label>Puntos Equipo 1:</label>
+            <input type="number" id="par-puntos1" min="0" required />
+          </div>
+          <div class="form-group">
+            <label>Puntos Equipo 2:</label>
+            <input type="number" id="par-puntos2" min="0" required />
+          </div>
+          <div class="form-group">
+            <label>Equipo Ganador:</label>
+            <select id="par-ganador" required>
+              <option value="">Seleccionar ganador</option>
+              <option value="equipo1">Equipo 1</option>
+              <option value="equipo2">Equipo 2</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-primary">Guardar Partida</button>
+        </form>
+      </section>
+
+      <!-- Sección Historial -->
+      <section id="historial" class="section">
+        <h2>Historial de Partidas</h2>
+        <div class="filtros">
+          <select id="filtro-tipo">
+            <option value="todas">Todas</option>
+            <option value="individual">Individuales</option>
+            <option value="parejas">Parejas</option>
+          </select>
+          <select id="filtro-jugador">
+            <option value="todos">Todos los jugadores</option>
+          </select>
+        </div>
+        <div id="lista-historial" class="lista"></div>
+      </section>
+
+      <!-- Sección Ranking -->
+      <section id="ranking" class="section">
+        <h2>Ranking</h2>
+        <div class="tabs">
+          <button class="tab-btn active" data-tab="ranking-individual">
+            Individual
+          </button>
+          <button class="tab-btn" data-tab="ranking-parejas">Parejas</button>
+        </div>
+        <div id="ranking-individual" class="ranking-table">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Jugador</th>
+                <th>PJ</th>
+                <th>G</th>
+                <th>P</th>
+                <th>%V</th>
+                <th>Pts</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-ranking-individual"></tbody>
+          </table>
+        </div>
+        <div id="ranking-parejas" class="ranking-table" style="display: none">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Pareja</th>
+                <th>PJ</th>
+                <th>G</th>
+                <th>P</th>
+                <th>%V</th>
+                <th>Pts</th>
+              </tr>
+            </thead>
+            <tbody id="tbody-ranking-parejas"></tbody>
+          </table>
+        </div>
+      </section>
     </main>
 
     <!-- Loading overlay -->
-    <div id="loading" class="loading" style="display:none;">
-        <div class="spinner"></div>
+    <div id="loading" class="loading" style="display: none">
+      <div class="spinner"></div>
     </div>
 
     <script src="src/js/api.js"></script>
@@ -321,33 +366,36 @@
     <script src="src/js/app.js"></script>
 
     <script>
-        // Auth guard - redirigir si no hay sesión
-        if (!localStorage.getItem('token')) {
-            window.location.href = 'login.html';
-        } else {
-            // Mostrar nombre del usuario
-            const usuario = JSON.parse(localStorage.getItem('usuario') || '{}');
-            document.getElementById('user-name').textContent = usuario.nombre || '';
-            document.getElementById('btn-logout').addEventListener('click', () => API.cerrarSesion());
-        }
+      // Auth guard - redirigir si no hay sesión
+      if (!localStorage.getItem("token")) {
+        window.location.href = "login.html";
+      } else {
+        // Mostrar nombre del usuario
+        const usuario = JSON.parse(localStorage.getItem("usuario") || "{}");
+        document.getElementById("user-name").textContent = usuario.nombre || "";
+        document
+          .getElementById("btn-logout")
+          .addEventListener("click", () => API.cerrarSesion());
+      }
     </script>
 
     <script>
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('./sw.js')
-                    .then(reg => console.log('SW registrado'))
-                    .catch(err => console.log('SW error:', err));
-            });
-        }
+      if ("serviceWorker" in navigator) {
+        window.addEventListener("load", () => {
+          navigator.serviceWorker
+            .register("./sw.js")
+            .then((reg) => console.log("SW registrado"))
+            .catch((err) => console.log("SW error:", err));
+        });
+      }
 
-        let deferredPrompt;
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            const banner = document.createElement('div');
-            banner.id = 'install-banner';
-            banner.innerHTML = `
+      let deferredPrompt;
+      window.addEventListener("beforeinstallprompt", (e) => {
+        e.preventDefault();
+        deferredPrompt = e;
+        const banner = document.createElement("div");
+        banner.id = "install-banner";
+        banner.innerHTML = `
                 <div class="install-banner">
                     <span>📲 Instalar Búfalos Mojados</span>
                     <div>
@@ -356,8 +404,8 @@
                     </div>
                 </div>
             `;
-            document.body.appendChild(banner);
-        });
+        document.body.appendChild(banner);
+      });
     </script>
-</body>
+  </body>
 </html>

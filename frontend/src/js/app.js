@@ -236,6 +236,7 @@ const App = (() => {
         });
 
         document.getElementById('btn-sumar-ronda').addEventListener('click', () => Live.sumarRonda());
+        document.getElementById('btn-empate').addEventListener('click', () => Live.registrarEmpate());
         document.getElementById('btn-cancelar-vivo').addEventListener('click', () => Live.cancelar());
         document.getElementById('btn-guardar-vivo').addEventListener('click', async () => {
             await Live.guardarEnHistorial();
