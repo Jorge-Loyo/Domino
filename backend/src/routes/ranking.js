@@ -20,7 +20,15 @@ router.get('/individual', async (req, res, next) => {
                     (pj.equipo = 'equipo2' AND p.ganador = 'equipo1')
                 THEN 1 END) AS perdidas,
                 COALESCE(SUM(CASE WHEN pj.equipo = 'equipo1' THEN p.puntos1 ELSE p.puntos2 END), 0) AS puntos_favor,
-                COALESCE(SUM(CASE WHEN pj.equipo = 'equipo1' THEN p.puntos2 ELSE p.puntos1 END), 0) AS puntos_contra
+                COALESCE(SUM(CASE WHEN pj.equipo = 'equipo1' THEN p.puntos2 ELSE p.puntos1 END), 0) AS puntos_contra,
+                COUNT(CASE WHEN
+                    (pj.equipo = 'equipo1' AND p.ganador = 'equipo1' AND p.puntos2 = 0) OR
+                    (pj.equipo = 'equipo2' AND p.ganador = 'equipo2' AND p.puntos1 = 0)
+                THEN 1 END) AS zapateros_dados,
+                COUNT(CASE WHEN
+                    (pj.equipo = 'equipo1' AND p.ganador = 'equipo2' AND p.puntos1 = 0) OR
+                    (pj.equipo = 'equipo2' AND p.ganador = 'equipo1' AND p.puntos2 = 0)
+                THEN 1 END) AS zapateros_recibidos
             FROM jugadores j
             LEFT JOIN partida_jugadores pj ON pj.jugador_id = j.id
             LEFT JOIN partidas p ON p.id = pj.partida_id
@@ -47,6 +55,8 @@ router.get('/individual', async (req, res, next) => {
             perdidas: parseInt(r.perdidas),
             puntos_favor: parseInt(r.puntos_favor),
             puntos_contra: parseInt(r.puntos_contra),
+            zapateros_dados: parseInt(r.zapateros_dados),
+            zapateros_recibidos: parseInt(r.zapateros_recibidos),
             porcentaje_victoria: parseInt(r.total_partidas) > 0
                 ? Math.round((parseInt(r.ganadas) / parseInt(r.total_partidas)) * 100)
                 : 0
@@ -94,13 +104,15 @@ router.get('/parejas', async (req, res, next) => {
             if (!parejas[key1]) {
                 parejas[key1] = {
                     jugadores: p.equipo1.map(j => j.nombre),
-                    ganadas: 0, perdidas: 0, puntos_favor: 0, puntos_contra: 0
+                    ganadas: 0, perdidas: 0, puntos_favor: 0, puntos_contra: 0,
+                    zapateros_dados: 0, zapateros_recibidos: 0
                 };
             }
             if (!parejas[key2]) {
                 parejas[key2] = {
                     jugadores: p.equipo2.map(j => j.nombre),
-                    ganadas: 0, perdidas: 0, puntos_favor: 0, puntos_contra: 0
+                    ganadas: 0, perdidas: 0, puntos_favor: 0, puntos_contra: 0,
+                    zapateros_dados: 0, zapateros_recibidos: 0
                 };
             }
 
@@ -109,12 +121,22 @@ router.get('/parejas', async (req, res, next) => {
             parejas[key2].puntos_favor += p.puntos2;
             parejas[key2].puntos_contra += p.puntos1;
 
+            const esZapatero = p.puntos1 === 0 || p.puntos2 === 0;
+
             if (p.ganador === 'equipo1') {
                 parejas[key1].ganadas++;
                 parejas[key2].perdidas++;
+                if (esZapatero && p.puntos2 === 0) {
+                    parejas[key1].zapateros_dados++;
+                    parejas[key2].zapateros_recibidos++;
+                }
             } else {
                 parejas[key2].ganadas++;
                 parejas[key1].perdidas++;
+                if (esZapatero && p.puntos1 === 0) {
+                    parejas[key2].zapateros_dados++;
+                    parejas[key1].zapateros_recibidos++;
+                }
             }
         });
 

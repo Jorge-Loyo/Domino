@@ -71,7 +71,9 @@ const UI = (() => {
      * Determina si una partida fue zapatero (un equipo en 0)
      */
     function esZapatero(puntos1, puntos2) {
-        return (puntos1 > 0 && puntos2 === 0) || (puntos2 > 0 && puntos1 === 0);
+        const p1 = Number(puntos1);
+        const p2 = Number(puntos2);
+        return (p1 > 0 && p2 === 0) || (p2 > 0 && p1 === 0);
     }
 
     function poblarSelects(jugadores) {
@@ -202,13 +204,15 @@ const UI = (() => {
         const tbody = document.getElementById('tbody-ranking-individual');
 
         if (ranking.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:#757575;">Sin datos aún</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:2rem; color:#757575;">Sin datos aún</td></tr>';
             return;
         }
 
         tbody.innerHTML = ranking.map((j, i) => {
             const posClass = i < 3 ? `posicion-${i + 1}` : '';
             const medalla = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+            const zap = j.zapateros_dados || 0;
+            const zapCell = zap > 0 ? `<span class="zap-count">👟 ${zap}</span>` : '0';
             return `
                 <tr class="${posClass}">
                     <td>${medalla}</td>
@@ -216,6 +220,7 @@ const UI = (() => {
                     <td>${j.total_partidas}</td>
                     <td>${j.ganadas}</td>
                     <td>${j.perdidas}</td>
+                    <td>${zapCell}</td>
                     <td>${j.porcentaje_victoria}%</td>
                     <td>${j.puntos_favor}</td>
                 </tr>
@@ -227,13 +232,15 @@ const UI = (() => {
         const tbody = document.getElementById('tbody-ranking-parejas');
 
         if (ranking.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding:2rem; color:#757575;">Sin datos aún</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:2rem; color:#757575;">Sin datos aún</td></tr>';
             return;
         }
 
         tbody.innerHTML = ranking.map((p, i) => {
             const posClass = i < 3 ? `posicion-${i + 1}` : '';
             const medalla = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
+            const zap = p.zapateros_dados || 0;
+            const zapCell = zap > 0 ? `<span class="zap-count">👟 ${zap}</span>` : '0';
             return `
                 <tr class="${posClass}">
                     <td>${medalla}</td>
@@ -241,6 +248,7 @@ const UI = (() => {
                     <td>${p.total_partidas}</td>
                     <td>${p.ganadas}</td>
                     <td>${p.perdidas}</td>
+                    <td>${zapCell}</td>
                     <td>${p.porcentaje_victoria}%</td>
                     <td>${p.puntos_favor}</td>
                 </tr>
