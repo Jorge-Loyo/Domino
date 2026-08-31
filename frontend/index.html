@@ -388,24 +388,9 @@
             .catch((err) => console.log("SW error:", err));
         });
       }
-
-      let deferredPrompt;
-      window.addEventListener("beforeinstallprompt", (e) => {
-        e.preventDefault();
-        deferredPrompt = e;
-        const banner = document.createElement("div");
-        banner.id = "install-banner";
-        banner.innerHTML = `
-                <div class="install-banner">
-                    <span>📲 Instalar Búfalos Mojados</span>
-                    <div>
-                        <button onclick="deferredPrompt.prompt(); deferredPrompt.userChoice.then(() => { deferredPrompt=null; document.getElementById('install-banner').remove(); })" class="btn-install">Instalar</button>
-                        <button onclick="document.getElementById('install-banner').remove()" class="btn-dismiss">Luego</button>
-                    </div>
-                </div>
-            `;
-        document.body.appendChild(banner);
-      });
     </script>
+
+    <!-- Banner de instalación PWA -->
+    <script src="src/js/install.js"></script>
   </body>
 </html>

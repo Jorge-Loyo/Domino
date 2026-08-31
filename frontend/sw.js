@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bufalos-mojados-v4';
+const CACHE_NAME = 'bufalos-mojados-v5';
 const ASSETS = [
     './',
     './index.html',
@@ -10,8 +10,10 @@ const ASSETS = [
     './src/js/ui.js',
     './src/js/live.js',
     './src/js/app.js',
+    './src/js/install.js',
     './manifest.json',
-    './icons/icon.svg'
+    './icons/icon.svg',
+    './icons/logo.png'
 ];
 
 self.addEventListener('install', (event) => {
