@@ -204,7 +204,7 @@ const UI = (() => {
         const tbody = document.getElementById('tbody-ranking-individual');
 
         if (ranking.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="9" style="text-align:center; padding:2rem; color:#757575;">Sin datos aún</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding:2rem; color:#757575;">Sin datos aún</td></tr>';
             return;
         }
 
@@ -213,13 +213,10 @@ const UI = (() => {
             const medalla = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : (i + 1);
             const zap = j.zapateros_recibidos || 0;
             const zapCell = zap > 0 ? `<span class="zap-count">👟 ${zap}</span>` : '';
-            const jorn = j.jornadas_ganadas || 0;
-            const jornCell = jorn > 0 ? `<span class="jorn-count">🏆 ${jorn}</span>` : '';
             return `
                 <tr class="${posClass}">
                     <td>${medalla}</td>
                     <td>${j.nombre}</td>
-                    <td>${jornCell}</td>
                     <td>${j.total_partidas}</td>
                     <td>${j.ganadas}</td>
                     <td>${j.perdidas}</td>
