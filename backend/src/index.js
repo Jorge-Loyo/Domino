@@ -8,6 +8,7 @@ const jugadoresRouter = require('./routes/jugadores');
 const partidasRouter = require('./routes/partidas');
 const rankingRouter = require('./routes/ranking');
 const vivoRouter = require('./routes/vivo');
+const jornadasRouter = require('./routes/jornadas');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ app.use('/api/jugadores', authMiddleware, jugadoresRouter);
 app.use('/api/partidas', authMiddleware, partidasRouter);
 app.use('/api/ranking', authMiddleware, rankingRouter);
 app.use('/api/vivo', authMiddleware, vivoRouter);
+app.use('/api/jornadas', authMiddleware, jornadasRouter);
 
 // Error handler
 app.use((err, req, res, next) => {

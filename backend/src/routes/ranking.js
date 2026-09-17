@@ -1,7 +1,41 @@
 const { Router } = require('express');
 const { sql } = require('../db');
+const { jornadaCerrada, calcularStatsJornada, agruparPorJornada } = require('../jornada');
+const { obtenerPartidasConJugadores } = require('../partidas-helper');
 
 const router = Router();
+
+/**
+ * Cuenta jornadas ganadas (solo jornadas ya cerradas / oficiales).
+ * Devuelve:
+ *   individual: Map jugadorId -> nº jornadas ganadas
+ *   parejas: Map 'idA-idB' (ordenado) -> nº jornadas ganadas
+ */
+async function contarJornadasGanadas() {
+    const partidas = await obtenerPartidasConJugadores();
+    const porJornada = agruparPorJornada(partidas);
+
+    const individual = {};
+    const parejas = {};
+
+    Object.entries(porJornada).forEach(([fecha, parts]) => {
+        // Solo cuentan las jornadas oficiales (cerradas después de las 6am)
+        if (!jornadaCerrada(fecha)) return;
+
+        const stats = calcularStatsJornada(parts);
+
+        if (stats.campeonIndividual) {
+            const id = stats.campeonIndividual.id;
+            individual[id] = (individual[id] || 0) + 1;
+        }
+        if (stats.campeonParejas) {
+            const key = stats.campeonParejas.key;
+            parejas[key] = (parejas[key] || 0) + 1;
+        }
+    });
+
+    return { individual, parejas };
+}
 
 // GET /api/ranking/individual - Ranking individual
 router.get('/individual', async (req, res, next) => {
@@ -48,6 +82,8 @@ router.get('/individual', async (req, res, next) => {
                 COALESCE(SUM(CASE WHEN pj.equipo = 'equipo1' THEN p.puntos1 ELSE p.puntos2 END), 0) DESC
         `;
 
+        const { individual: jornadasInd } = await contarJornadasGanadas();
+
         const resultado = ranking.map(r => ({
             ...r,
             total_partidas: parseInt(r.total_partidas),
@@ -57,10 +93,19 @@ router.get('/individual', async (req, res, next) => {
             puntos_contra: parseInt(r.puntos_contra),
             zapateros_dados: parseInt(r.zapateros_dados),
             zapateros_recibidos: parseInt(r.zapateros_recibidos),
+            jornadas_ganadas: jornadasInd[r.id] || 0,
             porcentaje_victoria: parseInt(r.total_partidas) > 0
                 ? Math.round((parseInt(r.ganadas) / parseInt(r.total_partidas)) * 100)
                 : 0
         }));
+
+        // Reordenar: jornadas ganadas primero, luego los criterios previos
+        resultado.sort((a, b) => {
+            if (b.jornadas_ganadas !== a.jornadas_ganadas) return b.jornadas_ganadas - a.jornadas_ganadas;
+            if (b.porcentaje_victoria !== a.porcentaje_victoria) return b.porcentaje_victoria - a.porcentaje_victoria;
+            if (b.ganadas !== a.ganadas) return b.ganadas - a.ganadas;
+            return b.puntos_favor - a.puntos_favor;
+        });
 
         res.json(resultado);
     } catch (err) {
@@ -95,14 +140,18 @@ router.get('/parejas', async (req, res, next) => {
             }
         });
 
+        const { parejas: jornadasPar } = await contarJornadasGanadas();
+
         // Calcular stats por pareja
         const parejas = {};
         Object.values(partidasMap).forEach(p => {
-            const key1 = p.equipo1.map(j => j.id).sort().join('-');
-            const key2 = p.equipo2.map(j => j.id).sort().join('-');
+            // Orden numérico para que la key coincida con la del cálculo de jornadas
+            const key1 = p.equipo1.map(j => j.id).sort((a, b) => a - b).join('-');
+            const key2 = p.equipo2.map(j => j.id).sort((a, b) => a - b).join('-');
 
             if (!parejas[key1]) {
                 parejas[key1] = {
+                    key: key1,
                     jugadores: p.equipo1.map(j => j.nombre),
                     ganadas: 0, perdidas: 0, puntos_favor: 0, puntos_contra: 0,
                     zapateros_dados: 0, zapateros_recibidos: 0
@@ -110,6 +159,7 @@ router.get('/parejas', async (req, res, next) => {
             }
             if (!parejas[key2]) {
                 parejas[key2] = {
+                    key: key2,
                     jugadores: p.equipo2.map(j => j.nombre),
                     ganadas: 0, perdidas: 0, puntos_favor: 0, puntos_contra: 0,
                     zapateros_dados: 0, zapateros_recibidos: 0
@@ -146,11 +196,13 @@ router.get('/parejas', async (req, res, next) => {
             return {
                 ...p,
                 total_partidas: total,
+                jornadas_ganadas: jornadasPar[p.key] || 0,
                 porcentaje_victoria: total > 0 ? Math.round((p.ganadas / total) * 100) : 0
             };
         });
 
         resultado.sort((a, b) => {
+            if (b.jornadas_ganadas !== a.jornadas_ganadas) return b.jornadas_ganadas - a.jornadas_ganadas;
             if (b.porcentaje_victoria !== a.porcentaje_victoria) return b.porcentaje_victoria - a.porcentaje_victoria;
             if (b.ganadas !== a.ganadas) return b.ganadas - a.ganadas;
             return b.puntos_favor - a.puntos_favor;

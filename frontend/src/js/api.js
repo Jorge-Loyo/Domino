@@ -195,6 +195,15 @@ const API = (() => {
         return request(`/vivo/${id}/cancelar`, { method: 'POST' });
     }
 
+    // --- Jornadas ---
+    function obtenerJornadas() {
+        return request('/jornadas');
+    }
+
+    function obtenerJornada(fecha) {
+        return request(`/jornadas/${fecha}`);
+    }
+
     return {
         login,
         registro,
@@ -215,6 +224,8 @@ const API = (() => {
         sumarRondaVivo,
         deshacerRondaVivo,
         finalizarPartidaVivo,
-        cancelarPartidaVivo
+        cancelarPartidaVivo,
+        obtenerJornadas,
+        obtenerJornada
     };
 })();

@@ -1,4 +1,4 @@
-const CACHE_NAME = 'bufalos-mojados-v7';
+const CACHE_NAME = 'bufalos-mojados-v8';
 const ASSETS = [
     './',
     './index.html',
@@ -9,6 +9,7 @@ const ASSETS = [
     './src/js/api.js',
     './src/js/ui.js',
     './src/js/live.js',
+    './src/js/jornadas.js',
     './src/js/app.js',
     './src/js/install.js',
     './manifest.json',

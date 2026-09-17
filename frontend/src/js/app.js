@@ -8,6 +8,7 @@ const App = (() => {
         setupNavegacion();
         setupTabs();
         setupEventos();
+        Jornadas.init();
         await cargarDatos();
         await Live.recuperarPartida();
     }
@@ -25,6 +26,7 @@ const App = (() => {
             UI.renderizarRankingParejas(rankingParejas);
 
             await cargarHistorial();
+            await Jornadas.cargar();
         } catch (err) {
             UI.mostrarNotificacion('Error al cargar datos: ' + err.message, 'error');
         }

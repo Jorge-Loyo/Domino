@@ -52,6 +52,7 @@
         <button class="nav-btn" data-section="en-vivo">En Vivo</button>
         <button class="nav-btn" data-section="nueva-partida">Registrar</button>
         <button class="nav-btn" data-section="historial">Historial</button>
+        <button class="nav-btn" data-section="jornadas">Jornadas</button>
         <button class="nav-btn" data-section="ranking">Ranking</button>
       </nav>
     </header>
@@ -311,6 +312,32 @@
         <div id="lista-historial" class="lista"></div>
       </section>
 
+      <!-- Sección Jornadas -->
+      <section id="jornadas" class="section">
+        <h2>Jornadas</h2>
+        <p class="section-sub">
+          Cada jornada agrupa las partidas del día (corte a las 6:00 AM). El
+          campeón queda oficial al cerrar la jornada.
+        </p>
+        <div id="lista-jornadas" class="lista"></div>
+
+        <!-- Detalle de jornada (modal simple) -->
+        <div id="jornada-detalle" class="jornada-detalle" style="display: none">
+          <div class="jornada-detalle-card">
+            <button class="jornada-close" id="jornada-close">✕</button>
+            <h3 id="jornada-detalle-titulo">Jornada</h3>
+            <div class="jornada-detalle-tabs">
+              <button class="tab-btn active" data-jtab="jd-individual">
+                Individual
+              </button>
+              <button class="tab-btn" data-jtab="jd-parejas">Parejas</button>
+            </div>
+            <div id="jd-individual" class="jornada-rank"></div>
+            <div id="jd-parejas" class="jornada-rank" style="display: none"></div>
+          </div>
+        </div>
+      </section>
+
       <!-- Sección Ranking -->
       <section id="ranking" class="section">
         <h2>Ranking</h2>
@@ -326,6 +353,7 @@
               <tr>
                 <th>#</th>
                 <th>Jugador</th>
+                <th title="Jornadas ganadas">🏆</th>
                 <th>PJ</th>
                 <th>G</th>
                 <th>P</th>
@@ -343,6 +371,7 @@
               <tr>
                 <th>#</th>
                 <th>Pareja</th>
+                <th title="Jornadas ganadas">🏆</th>
                 <th>PJ</th>
                 <th>G</th>
                 <th>P</th>
@@ -365,6 +394,7 @@
     <script src="src/js/api.js"></script>
     <script src="src/js/ui.js"></script>
     <script src="src/js/live.js"></script>
+    <script src="src/js/jornadas.js"></script>
     <script src="src/js/app.js"></script>
 
     <script>
