@@ -1029,6 +1029,48 @@ fieldset legend {
   }
 }
 
+/* Update banner (nueva versión) */
+.update-banner {
+  position: fixed;
+  top: calc(0.8rem + env(safe-area-inset-top));
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--accent);
+  color: #1b1b1b;
+  padding: 0.7rem 1rem;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  z-index: 10001;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  font-size: 0.9rem;
+  font-weight: 600;
+  animation: bannerDown 0.4s ease;
+  max-width: 92vw;
+}
+
+@keyframes bannerDown {
+  from { transform: translate(-50%, -120%); }
+  to { transform: translate(-50%, 0); }
+}
+
+.btn-update {
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.4rem 0.9rem;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 0.85rem;
+}
+
+.btn-update:active {
+  transform: scale(0.95);
+}
+
 /* Install banner */
 #install-banner {
   transition: opacity 0.3s;

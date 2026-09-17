@@ -411,16 +411,8 @@
       }
     </script>
 
-    <script>
-      if ("serviceWorker" in navigator) {
-        window.addEventListener("load", () => {
-          navigator.serviceWorker
-            .register("./sw.js")
-            .then((reg) => console.log("SW registrado"))
-            .catch((err) => console.log("SW error:", err));
-        });
-      }
-    </script>
+    <!-- Service Worker: registro + detección de actualizaciones -->
+    <script src="src/js/update.js"></script>
 
     <!-- Banner de instalación PWA -->
     <script src="src/js/install.js"></script>
