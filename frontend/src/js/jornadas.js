@@ -35,19 +35,15 @@ const Jornadas = (() => {
 
         container.innerHTML = jornadas.map(j => {
             const enCurso = !j.cerrada;
-            const ci = j.campeon_individual;
             const cp = j.campeon_parejas;
 
             const estado = enCurso
                 ? `<span class="jornada-estado en-curso">🔴 En curso</span>`
                 : `<span class="jornada-estado cerrada">✅ Oficial</span>`;
 
-            const campeonInd = ci
-                ? `<div class="jornada-campeon"><span class="jc-label">👤 ${enCurso ? 'Va ganando' : 'Campeón'}:</span> <strong>${ci.nombre}</strong> <span class="jc-detalle">${ci.ganadas}W</span></div>`
-                : '';
             const campeonPar = cp
-                ? `<div class="jornada-campeon"><span class="jc-label">👥 ${enCurso ? 'Va ganando' : 'Campeón'}:</span> <strong>${cp.jugadores.join(' & ')}</strong> <span class="jc-detalle">${cp.ganadas}W</span></div>`
-                : '';
+                ? `<div class="jornada-campeon"><span class="jc-label">🏆 ${enCurso ? 'Va ganando' : 'Campeón'}:</span> <strong>${cp.jugadores.join(' & ')}</strong> <span class="jc-detalle">${cp.ganadas}W</span></div>`
+                : `<div class="jornada-campeon"><span class="jc-label">Sin partidas de parejas</span></div>`;
 
             return `
                 <div class="jornada-item ${enCurso ? 'en-curso' : ''}" data-fecha="${j.fecha}">
@@ -56,7 +52,6 @@ const Jornadas = (() => {
                         ${estado}
                     </div>
                     <div class="jornada-body">
-                        ${campeonInd}
                         ${campeonPar}
                         <div class="jornada-meta">${j.total_partidas} partida${j.total_partidas !== 1 ? 's' : ''} · Toca para ver el detalle</div>
                     </div>
