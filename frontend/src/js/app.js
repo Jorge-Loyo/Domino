@@ -44,16 +44,35 @@ const App = (() => {
     }
 
     // --- Navegación ---
+    // Muestra una sección por id. Si tiene un nav-btn asociado, lo marca activo.
+    function mostrarSeccion(sectionId) {
+        document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+        const seccion = document.getElementById(sectionId);
+        if (seccion) seccion.classList.add('active');
+
+        document.querySelectorAll('.nav-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.section === sectionId);
+        });
+
+        cargarDatos();
+    }
+
     function setupNavegacion() {
         document.querySelectorAll('.nav-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
-                document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-                btn.classList.add('active');
-                document.getElementById(btn.dataset.section).classList.add('active');
-                cargarDatos();
-            });
+            btn.addEventListener('click', () => mostrarSeccion(btn.dataset.section));
         });
+
+        // Botón "Registrar partida pasada" dentro de En Vivo
+        const btnRegistrar = document.getElementById('btn-ir-registrar');
+        if (btnRegistrar) {
+            btnRegistrar.addEventListener('click', () => mostrarSeccion('nueva-partida'));
+        }
+
+        // Botón "Volver a En Vivo" dentro de Registrar
+        const btnVolver = document.getElementById('btn-volver-vivo');
+        if (btnVolver) {
+            btnVolver.addEventListener('click', () => mostrarSeccion('en-vivo'));
+        }
     }
 
     // --- Tabs ---

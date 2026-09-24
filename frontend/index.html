@@ -50,7 +50,6 @@
           Jugadores
         </button>
         <button class="nav-btn" data-section="en-vivo">En Vivo</button>
-        <button class="nav-btn" data-section="nueva-partida">Registrar</button>
         <button class="nav-btn" data-section="historial">Historial</button>
         <button class="nav-btn" data-section="jornadas">Jornadas</button>
         <button class="nav-btn" data-section="ranking">Ranking</button>
@@ -84,6 +83,10 @@
             </button>
             <button class="tab-btn" data-tab="live-parejas">Parejas</button>
           </div>
+
+          <button class="btn-secondary" id="btn-ir-registrar" type="button">
+            📝 Registrar una partida pasada
+          </button>
 
           <form id="form-live-individual" class="form-partida">
             <div class="form-group">
@@ -213,7 +216,10 @@
 
       <!-- Sección Registrar Partida -->
       <section id="nueva-partida" class="section">
-        <h2>Registrar Partida</h2>
+        <button class="btn-volver" id="btn-volver-vivo" type="button">
+          ← Volver a En Vivo
+        </button>
+        <h2>Registrar Partida Pasada</h2>
         <div class="tabs">
           <button class="tab-btn active" data-tab="individual">
             Individual

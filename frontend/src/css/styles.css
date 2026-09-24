@@ -244,6 +244,21 @@ select:focus {
   transform: scale(0.97);
 }
 
+.btn-volver {
+  background: transparent;
+  border: none;
+  color: var(--primary);
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0.3rem 0;
+  margin-bottom: 0.8rem;
+}
+
+.btn-volver:hover {
+  text-decoration: underline;
+}
+
 .round-tie {
   color: var(--accent);
   font-weight: 700;
@@ -1051,8 +1066,12 @@ fieldset legend {
 }
 
 @keyframes bannerDown {
-  from { transform: translate(-50%, -120%); }
-  to { transform: translate(-50%, 0); }
+  from {
+    transform: translate(-50%, -120%);
+  }
+  to {
+    transform: translate(-50%, 0);
+  }
 }
 
 .btn-update {
