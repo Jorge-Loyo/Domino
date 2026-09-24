@@ -1,46 +1,55 @@
 /**
  * Utilidades de Jornada
  *
- * Una "jornada" es una sesión de juego de un día, con corte a las 6 AM:
- * las partidas jugadas entre medianoche y las 6 AM cuentan para la jornada
- * del día anterior (porque suele ser continuación de la misma noche de juego).
+ * Una "jornada" es una sesión de juego de un día. Como las partidas suelen
+ * extenderse pasada la medianoche (e incluso hasta la mañana siguiente),
+ * usamos una hora de corte: todo lo jugado antes de esa hora cuenta para la
+ * jornada del día anterior.
  *
- * Regla: fecha_jornada = (created_at - 6 horas)::date
+ * IMPORTANTE: los timestamps se guardan en UTC en la base de datos, pero el
+ * juego ocurre en horario de Argentina (GMT-3). Por eso convertimos a hora
+ * local de Argentina ANTES de aplicar el corte, sin depender de la zona
+ * horaria del servidor (Render corre en UTC).
+ *
+ * Regla: fecha_jornada = (created_at en GMT-3 - HORA_CORTE horas)::date
  */
 
-const HORA_CORTE = 6; // 6 AM
+const HORA_CORTE = 10;       // 10 AM (cubre sesiones que se alargan hasta la mañana)
+const OFFSET_HORAS = -3;     // Argentina GMT-3
+
+// Fragmento SQL equivalente (por si se necesitara en una query):
+// pasar a hora Argentina (-3h) y luego restar el corte
+const JORNADA_SQL = `((created_at AT TIME ZONE 'UTC' AT TIME ZONE 'America/Argentina/Buenos_Aires') - INTERVAL '${HORA_CORTE} hours')::date`;
 
 /**
- * Fragmento SQL que calcula la fecha de jornada de una columna timestamp.
- * Uso: sql`... ${jornadaExpr('p.created_at')} ...` NO aplica (neon no interpola raw),
- * por eso lo dejamos como string para usar en template con sql.unsafe si hiciera falta.
- * En la práctica lo insertamos directo en las queries.
- */
-const JORNADA_SQL = `(created_at - INTERVAL '${HORA_CORTE} hours')::date`;
-
-/**
- * Dado un timestamp JS/ISO, devuelve la fecha de jornada (YYYY-MM-DD) en JS.
- * Útil para agrupar en el servidor cuando ya tenemos los datos en memoria.
+ * Dado un timestamp UTC (Date o ISO), devuelve la fecha de jornada (YYYY-MM-DD).
+ * Convierte a hora de Argentina y aplica el corte, todo con aritmética de UTC
+ * para que sea independiente de la zona horaria del servidor.
  */
 function fechaJornada(timestamp) {
     const d = new Date(timestamp);
-    d.setHours(d.getHours() - HORA_CORTE);
-    const y = d.getFullYear();
-    const m = String(d.getMonth() + 1).padStart(2, '0');
-    const day = String(d.getDate()).padStart(2, '0');
+    // Desplazar el instante: a hora de Argentina y luego restar la hora de corte.
+    // (OFFSET_HORAS es negativo, así que sumarlo mueve hacia atrás)
+    const ajustado = new Date(d.getTime() + (OFFSET_HORAS - HORA_CORTE) * 3600 * 1000);
+    // Tomar la fecha en UTC del instante ajustado (evita usar getHours locales)
+    const y = ajustado.getUTCFullYear();
+    const m = String(ajustado.getUTCMonth() + 1).padStart(2, '0');
+    const day = String(ajustado.getUTCDate()).padStart(2, '0');
     return `${y}-${m}-${day}`;
 }
 
 /**
- * Devuelve true si la jornada de la fecha dada ya cerró (ya pasaron las 6 AM
- * del día siguiente a esa jornada).
+ * Devuelve true si la jornada de la fecha dada ya cerró (ya pasó la hora de
+ * corte del día siguiente, en hora de Argentina).
  */
 function jornadaCerrada(fechaJornadaStr) {
-    // La jornada del día X cierra a las 6 AM del día X+1
-    const cierre = new Date(`${fechaJornadaStr}T00:00:00`);
-    cierre.setDate(cierre.getDate() + 1);
-    cierre.setHours(HORA_CORTE, 0, 0, 0);
-    return new Date() >= cierre;
+    // La jornada del día X cierra a las HORA_CORTE del día X+1 (hora Argentina).
+    // Convertimos ese momento de cierre a UTC para comparar con "ahora".
+    const [y, m, day] = fechaJornadaStr.split('-').map(Number);
+    // Cierre en hora Argentina = (X+1) a las HORA_CORTE
+    // En UTC = ese momento - OFFSET_HORAS (o sea + 3h)
+    const cierreUTC = Date.UTC(y, m - 1, day + 1, HORA_CORTE - OFFSET_HORAS, 0, 0);
+    return Date.now() >= cierreUTC;
 }
 
 /**
