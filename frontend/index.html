@@ -333,7 +333,11 @@
               <button class="tab-btn" data-jtab="jd-parejas">Parejas</button>
             </div>
             <div id="jd-individual" class="jornada-rank"></div>
-            <div id="jd-parejas" class="jornada-rank" style="display: none"></div>
+            <div
+              id="jd-parejas"
+              class="jornada-rank"
+              style="display: none"
+            ></div>
           </div>
         </div>
       </section>
@@ -342,12 +346,18 @@
       <section id="ranking" class="section">
         <h2>Ranking</h2>
         <div class="tabs">
-          <button class="tab-btn active" data-tab="ranking-individual">
+          <button class="tab-btn" data-tab="ranking-individual">
             Individual
           </button>
-          <button class="tab-btn" data-tab="ranking-parejas">Parejas</button>
+          <button class="tab-btn active" data-tab="ranking-parejas">
+            Parejas
+          </button>
         </div>
-        <div id="ranking-individual" class="ranking-table">
+        <div
+          id="ranking-individual"
+          class="ranking-table"
+          style="display: none"
+        >
           <table>
             <thead>
               <tr>
@@ -364,7 +374,7 @@
             <tbody id="tbody-ranking-individual"></tbody>
           </table>
         </div>
-        <div id="ranking-parejas" class="ranking-table" style="display: none">
+        <div id="ranking-parejas" class="ranking-table">
           <table>
             <thead>
               <tr>
