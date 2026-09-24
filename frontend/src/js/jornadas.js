@@ -74,12 +74,12 @@ const Jornadas = (() => {
             renderizarRankingDetalle('jd-individual', data.ranking_jugadores, false, data.cerrada);
             renderizarRankingDetalle('jd-parejas', data.ranking_parejas, true, data.cerrada);
 
-            // Reset tabs
+            // Reset tabs: abrir en Parejas por defecto (índice 1)
             document.querySelectorAll('#jornada-detalle .tab-btn').forEach((b, i) => {
-                b.classList.toggle('active', i === 0);
+                b.classList.toggle('active', i === 1);
             });
-            document.getElementById('jd-individual').style.display = 'block';
-            document.getElementById('jd-parejas').style.display = 'none';
+            document.getElementById('jd-individual').style.display = 'none';
+            document.getElementById('jd-parejas').style.display = 'block';
 
             document.getElementById('jornada-detalle').style.display = 'flex';
         } catch (err) {
